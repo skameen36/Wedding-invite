@@ -587,16 +587,15 @@ export const MainInvitationCard = ({ weddingData, onLaunch3D, onShowToast }) => 
         ))}
       </div>
 
-      {/* 5. 2026 TACTILE ACTION HUB BUTTONS */}
+      {/* 5. 2026 TACTILE ACTION HUB BUTTONS (Compact 2x2 on Mobile, Sleek & Balanced) */}
       <div
         className="action-buttons-group"
         style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '0.65rem',
-          marginBottom: '1rem',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(145px, 1fr))',
+          gap: '0.6rem',
+          maxWidth: '520px',
+          margin: '0 auto 1.1rem',
           position: 'relative',
           zIndex: 2
         }}
@@ -607,15 +606,19 @@ export const MainInvitationCard = ({ weddingData, onLaunch3D, onShowToast }) => 
           onClick={handleMaps}
           className="clay-btn-gold animate-shimmer tactile-btn"
           style={{
-            flex: '1 1 170px',
-            padding: '0.85rem 1.15rem',
-            borderRadius: '1rem',
-            fontSize: '0.82rem',
-            gap: '0.45rem'
+            padding: '0.65rem 0.75rem',
+            minHeight: '48px',
+            borderRadius: '0.85rem',
+            fontSize: '0.78rem',
+            fontWeight: 800,
+            gap: '0.4rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <Navigation size={16} color="#01110b" fill="#01110b" />
-          <span>📍 Map: Nikah (Barsi Takli)</span>
+          <Navigation size={15} color="#01110b" fill="#01110b" />
+          <span>Nikah Map (Barsi Takli)</span>
         </button>
 
         {/* Walima Map Button */}
@@ -627,15 +630,19 @@ export const MainInvitationCard = ({ weddingData, onLaunch3D, onShowToast }) => 
           }}
           className="clay-btn-gold animate-shimmer tactile-btn"
           style={{
-            flex: '1 1 170px',
-            padding: '0.85rem 1.15rem',
-            borderRadius: '1rem',
-            fontSize: '0.82rem',
-            gap: '0.45rem'
+            padding: '0.65rem 0.75rem',
+            minHeight: '48px',
+            borderRadius: '0.85rem',
+            fontSize: '0.78rem',
+            fontWeight: 800,
+            gap: '0.4rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <Navigation size={16} color="#01110b" fill="#01110b" />
-          <span>📍 Map: Walima (Amravati)</span>
+          <Navigation size={15} color="#01110b" fill="#01110b" />
+          <span>Walima Map (Amravati)</span>
         </button>
 
         {/* Add to Calendar Button */}
@@ -644,15 +651,18 @@ export const MainInvitationCard = ({ weddingData, onLaunch3D, onShowToast }) => 
           onClick={handleGoogleCalendar}
           className="clay-btn-emerald tactile-btn"
           style={{
-            flex: '1 1 140px',
-            padding: '0.85rem 1rem',
-            borderRadius: '1rem',
-            fontSize: '0.82rem',
+            padding: '0.65rem 0.75rem',
+            minHeight: '48px',
+            borderRadius: '0.85rem',
+            fontSize: '0.78rem',
             fontWeight: 700,
-            gap: '0.45rem'
+            gap: '0.4rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <CalendarPlus size={16} color="#d4af37" />
+          <CalendarPlus size={15} color="#d4af37" />
           <span>Add to Calendar</span>
         </button>
 
@@ -665,20 +675,24 @@ export const MainInvitationCard = ({ weddingData, onLaunch3D, onShowToast }) => 
           }}
           className="clay-btn-emerald tactile-btn"
           style={{
-            flex: '1 1 140px',
-            padding: '0.85rem 1rem',
-            borderRadius: '1rem',
+            padding: '0.65rem 0.75rem',
+            minHeight: '48px',
+            borderRadius: '0.85rem',
             fontFamily: 'var(--font-cinzel)',
-            fontSize: '0.76rem',
+            fontSize: '0.75rem',
             fontWeight: 700,
-            letterSpacing: '0.06em',
+            letterSpacing: '0.04em',
             textTransform: 'uppercase',
-            gap: '0.45rem'
+            gap: '0.4rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1.5px solid rgba(212, 175, 55, 0.65)'
           }}
         >
-          <Orbit size={16} color="#d4af37" />
+          <Orbit size={15} color="#d4af37" />
           <span>View 3D Heart</span>
-          <Sparkles size={12} color="#d4af37" />
+          <Sparkles size={11} color="#d4af37" />
         </button>
       </div>
 

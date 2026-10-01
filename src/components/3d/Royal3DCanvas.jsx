@@ -1,11 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
+export const Royal3DCanvas = ({
+  isUnlocked,
+  is3DModeOnly,
+  coupleData,
+  targetFace = null,
+  onFaceSnapped,
+  isAutoSpinning = true
+}) => {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // References for external control if needed
   const stateRef = useRef({
     scene: null,
     camera: null,
@@ -15,10 +21,12 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     orbitRing2: null,
     particleSystem: null,
     isDragging: false,
-    previousPointerX: 0,
-    previousPointerY: 0,
+    prevX: 0,
+    prevY: 0,
     rotVelocityX: 0,
-    rotVelocityY: 0.008,
+    rotVelocityY: 0,
+    isTweening: false,
+    targetRotY: 0,
     userInteracting: false,
     interactionTimer: null,
     animFrameId: null,
@@ -27,19 +35,20 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
 
   /**
    * Generates ultra-crisp 2048x2048 Medallion Canvas Texture
+   * High-contrast, large typography easily legible on all mobile displays.
    */
-  const createMedallionTexture = (role, name, subtitle, arabicHonorific) => {
+  const createMedallionTexture = (role, name, subtitle, arabicHonorific, location) => {
     const canvas = document.createElement('canvas');
     canvas.width = 2048;
     canvas.height = 2048;
     const ctx = canvas.getContext('2d');
 
-    // Rich radial emerald gradient with dark vignette
-    const radGrad = ctx.createRadialGradient(1024, 1024, 250, 1024, 1024, 980);
-    radGrad.addColorStop(0, '#0c4434');
-    radGrad.addColorStop(0.55, '#05291e');
-    radGrad.addColorStop(0.85, '#031911');
-    radGrad.addColorStop(1, '#010c07');
+    // Rich radial emerald gradient with deep dark vignette
+    const radGrad = ctx.createRadialGradient(1024, 1024, 180, 1024, 1024, 980);
+    radGrad.addColorStop(0, '#0d4e3a');
+    radGrad.addColorStop(0.45, '#062d21');
+    radGrad.addColorStop(0.75, '#031a13');
+    radGrad.addColorStop(1, '#010c08');
 
     ctx.fillStyle = radGrad;
     ctx.beginPath();
@@ -47,28 +56,28 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     ctx.fill();
 
     // Outer Heavy Gold Filigree Border
-    ctx.lineWidth = 26;
+    ctx.lineWidth = 32;
     ctx.strokeStyle = '#d4af37';
     ctx.beginPath();
     ctx.arc(1024, 1024, 920, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Secondary Beaded Ring
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = '#f8f1de';
-    ctx.setLineDash([12, 16]);
+    // Secondary Beaded Golden Ring
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = '#fff2b8';
+    ctx.setLineDash([14, 18]);
     ctx.beginPath();
-    ctx.arc(1024, 1024, 875, 0, Math.PI * 2);
+    ctx.arc(1024, 1024, 870, 0, Math.PI * 2);
     ctx.stroke();
     ctx.setLineDash([]); // Reset dash
 
     // 8-Pointed Star Accents around circumference
     for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 4) {
-      const x = 1024 + Math.cos(angle) * 896;
-      const y = 1024 + Math.sin(angle) * 896;
+      const x = 1024 + Math.cos(angle) * 895;
+      const y = 1024 + Math.sin(angle) * 895;
       ctx.fillStyle = '#f4e39f';
       ctx.beginPath();
-      ctx.arc(x, y, 14, 0, Math.PI * 2);
+      ctx.arc(x, y, 16, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -76,51 +85,58 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     ctx.textBaseline = 'middle';
 
     // 1. Arabic Calligraphy Honorific
-    ctx.fillStyle = '#f4e39f';
-    ctx.font = 'bold 96px "Amiri", serif';
-    ctx.shadowColor = 'rgba(212, 175, 55, 0.7)';
-    ctx.shadowBlur = 20;
-    ctx.fillText(arabicHonorific, 1024, 520);
+    ctx.fillStyle = '#fff4ce';
+    ctx.font = 'bold 125px "Amiri", serif';
+    ctx.shadowColor = 'rgba(212, 175, 55, 0.9)';
+    ctx.shadowBlur = 24;
+    ctx.fillText(arabicHonorific, 1024, 460);
     ctx.shadowBlur = 0;
 
     // 2. Role Ribbon (THE GROOM / THE BRIDE)
-    ctx.fillStyle = '#d4af37';
-    ctx.font = '700 64px "Cinzel", serif';
-    ctx.letterSpacing = '6px';
-    ctx.fillText(role.toUpperCase(), 1024, 710);
+    ctx.fillStyle = '#f4e39f';
+    ctx.font = '800 80px "Cinzel", serif';
+    ctx.letterSpacing = '8px';
+    ctx.fillText(role.toUpperCase(), 1024, 630);
 
     // Decorative Horizontal Filigree Bar
-    ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
-    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(244, 227, 159, 0.85)';
+    ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.moveTo(640, 780);
-    ctx.lineTo(1408, 780);
+    ctx.moveTo(560, 700);
+    ctx.lineTo(1488, 700);
     ctx.stroke();
 
-    // Center Diamond on Divider
+    // Center Gold Diamond
     ctx.fillStyle = '#fffef8';
     ctx.beginPath();
-    ctx.arc(1024, 780, 10, 0, Math.PI * 2);
+    ctx.arc(1024, 700, 14, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Name with Warm Gold Glow
-    ctx.fillStyle = '#fffef8';
-    ctx.font = 'bold 118px "Playfair Display", serif';
-    ctx.shadowColor = 'rgba(244, 227, 159, 0.9)';
-    ctx.shadowBlur = 35;
-    ctx.fillText(name, 1024, 980);
+    // 3. Name with Warm Gold & White Glow (Large & Bold for Elders & Mobile)
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 148px "Playfair Display", serif';
+    ctx.shadowColor = 'rgba(244, 227, 159, 1)';
+    ctx.shadowBlur = 34;
+    ctx.fillText(name, 1024, 910);
     ctx.shadowBlur = 0;
 
-    // 4. Subtitle / Lineage
+    // 4. Subtitle / Parentage (High Contrast, Crisp)
     ctx.fillStyle = '#fbf3d5';
-    ctx.font = '500 58px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(subtitle, 1024, 1170);
+    ctx.font = '600 82px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(subtitle, 1024, 1100);
 
-    // 5. Wedding Date Monogram
+    // 5. Location
+    if (location) {
+      ctx.fillStyle = '#e6c86a';
+      ctx.font = '700 70px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`📍 ${location}`, 1024, 1240);
+    }
+
+    // 6. Wedding Date Monogram
     ctx.fillStyle = '#d4af37';
-    ctx.font = 'italic 62px "Cinzel", serif';
-    ctx.letterSpacing = '4px';
-    ctx.fillText('13 · XII · 2026', 1024, 1370);
+    ctx.font = 'italic 72px "Cinzel", serif';
+    ctx.letterSpacing = '5px';
+    ctx.fillText('13 · XII · 2026', 1024, 1390);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.needsUpdate = true;
@@ -141,7 +157,7 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     state.scene = scene;
 
     const isMobile = window.innerWidth < 640;
-    const initialZ = isUnlocked ? (isMobile ? 5.8 : 4.4) : (isMobile ? 8.6 : 6.8);
+    const initialZ = isUnlocked ? (isMobile ? 4.8 : 4.4) : (isMobile ? 6.8 : 6.2);
 
     const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0, 0.15, initialZ);
@@ -161,18 +177,18 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     state.renderer = renderer;
 
     // 3. Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0x0a3d2e, 1.9);
+    const ambientLight = new THREE.AmbientLight(0x0a3d2e, 2.1);
     scene.add(ambientLight);
 
-    const goldKeyLight = new THREE.DirectionalLight(0xfff3cc, 2.2);
+    const goldKeyLight = new THREE.DirectionalLight(0xfff3cc, 2.3);
     goldKeyLight.position.set(4, 6, 5);
     scene.add(goldKeyLight);
 
-    const backRimLight = new THREE.DirectionalLight(0xd4af37, 1.8);
+    const backRimLight = new THREE.DirectionalLight(0xd4af37, 2.0);
     backRimLight.position.set(-4, -3, -5);
     scene.add(backRimLight);
 
-    const centerGlowLight = new THREE.PointLight(0xffdf80, 2.4, 12);
+    const centerGlowLight = new THREE.PointLight(0xffdf80, 2.6, 14);
     centerGlowLight.position.set(0, 3, 2);
     scene.add(centerGlowLight);
 
@@ -217,7 +233,8 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
       metalness: 0.94
     });
 
-    const baseScale = isMobile ? 0.48 : 0.68;
+    // Prominent scale on both mobile and desktop so it fills the view comfortably
+    const baseScale = isMobile ? 0.74 : 0.74;
     const heartMesh = new THREE.Mesh(heartGeometry, [heartBodyMaterial, goldBevelMaterial]);
     heartMesh.scale.set(baseScale, baseScale, baseScale);
     heartGroup.add(heartMesh);
@@ -227,19 +244,20 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
       coupleData.groom.title,
       coupleData.groom.name,
       coupleData.groom.parentage,
-      coupleData.groom.arabicTitle
+      coupleData.groom.arabicTitle,
+      coupleData.groom.location
     );
 
-    const medallionGeo = new THREE.CircleGeometry(1.05, 64);
+    const medallionGeo = new THREE.CircleGeometry(1.22, 64);
     const groomMaterial = new THREE.MeshBasicMaterial({
       map: groomTexture,
       transparent: true,
       side: THREE.FrontSide
     });
     const groomMedallion = new THREE.Mesh(medallionGeo, groomMaterial);
-    const medallionScale = isMobile ? 0.55 : 0.76;
+    const medallionScale = 0.86;
     groomMedallion.scale.set(medallionScale, medallionScale, medallionScale);
-    groomMedallion.position.set(0, 0.05, 0.35 * (isMobile ? 0.7 : 0.9));
+    groomMedallion.position.set(0, 0.05, 0.36);
     heartGroup.add(groomMedallion);
 
     // Side 2: Bride Medallion (Back -Z, 180° rotated)
@@ -247,7 +265,8 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
       coupleData.bride.title,
       coupleData.bride.name,
       coupleData.bride.parentage,
-      coupleData.bride.arabicTitle
+      coupleData.bride.arabicTitle,
+      coupleData.bride.location
     );
     const brideMaterial = new THREE.MeshBasicMaterial({
       map: brideTexture,
@@ -256,13 +275,13 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     });
     const brideMedallion = new THREE.Mesh(medallionGeo, brideMaterial);
     brideMedallion.scale.set(medallionScale, medallionScale, medallionScale);
-    brideMedallion.position.set(0, 0.05, -0.35 * (isMobile ? 0.7 : 0.9));
+    brideMedallion.position.set(0, 0.05, -0.36);
     brideMedallion.rotation.y = Math.PI; // Face backwards
     heartGroup.add(brideMedallion);
 
     // 6. Dual Celestial Golden Orbit Rings
-    const ringRadius = isMobile ? 1.35 : 1.85;
-    const ringGeo = new THREE.TorusGeometry(ringRadius, 0.022, 16, 100);
+    const ringRadius = isMobile ? 1.65 : 1.95;
+    const ringGeo = new THREE.TorusGeometry(ringRadius, 0.024, 16, 100);
     const ringMat = new THREE.MeshStandardMaterial({
       color: 0xf4e39f,
       metalness: 0.92,
@@ -317,105 +336,66 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     scene.add(particleSystem);
     state.particleSystem = particleSystem;
 
-    // 8. Interactive Touch & Mouse Drag Controls
-    const handlePointerDown = (clientX, clientY) => {
-      state.isDragging = true;
-      state.userInteracting = true;
-      state.previousPointerX = clientX;
-      state.previousPointerY = clientY;
-      if (state.interactionTimer) clearTimeout(state.interactionTimer);
-    };
-
-    const handlePointerMove = (clientX, clientY) => {
-      if (!state.isDragging || !state.heartGroup) return;
-
-      const deltaX = clientX - state.previousPointerX;
-      const deltaY = clientY - state.previousPointerY;
-
-      state.rotVelocityY = deltaX * 0.007;
-      state.rotVelocityX = deltaY * 0.004;
-
-      state.heartGroup.rotation.y += state.rotVelocityY;
-      state.heartGroup.rotation.x += state.rotVelocityX;
-
-      state.previousPointerX = clientX;
-      state.previousPointerY = clientY;
-    };
-
-    const handlePointerUp = () => {
-      state.isDragging = false;
-      state.interactionTimer = setTimeout(() => {
-        state.userInteracting = false;
-      }, 1800);
-    };
-
-    // Event listeners
-    const onMouseDown = (e) => handlePointerDown(e.clientX, e.clientY);
-    const onMouseMove = (e) => handlePointerMove(e.clientX, e.clientY);
-    const onMouseUp = () => handlePointerUp();
-
-    const onTouchStart = (e) => {
-      if (e.touches.length > 0) {
-        handlePointerDown(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    };
-    const onTouchMove = (e) => {
-      if (e.touches.length > 0) {
-        handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    };
-    const onTouchEnd = () => handlePointerUp();
-
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-    window.addEventListener('touchend', onTouchEnd);
-
-    // 9. Resize Handling
+    // 8. Window Resize Handling
     const onWindowResize = () => {
       if (!state.camera || !state.renderer) return;
       state.camera.aspect = window.innerWidth / window.innerHeight;
       state.camera.updateProjectionMatrix();
       state.renderer.setSize(window.innerWidth, window.innerHeight);
-
-      const isMob = window.innerWidth < 640;
-      if (!isUnlocked) {
-        state.camera.position.z = isMob ? 8.6 : 6.8;
-      } else {
-        state.camera.position.z = isMob ? 5.8 : 4.4;
-      }
     };
     window.addEventListener('resize', onWindowResize);
 
-    // 10. Animation Loop
+    // 9. Animation Loop (Smooth, Stable, Clamped)
     const animate = () => {
       state.animFrameId = requestAnimationFrame(animate);
       const elapsedTime = state.clock.getElapsedTime();
 
       if (state.heartGroup) {
-        if (!state.userInteracting) {
-          // Perpetual gentle rotation
-          state.heartGroup.rotation.y += 0.0075;
-          // Floating levitation
-          state.heartGroup.position.y = 0.08 + Math.sin(elapsedTime * 1.5) * 0.08;
-          // Smooth return to upright
-          state.heartGroup.rotation.x += (Math.sin(elapsedTime * 0.8) * 0.06 - state.heartGroup.rotation.x) * 0.05;
-        } else if (!state.isDragging) {
-          // Inertia damping
+        if (state.isTweening) {
+          // Smooth preset face transition
+          const diff = state.targetRotY - state.heartGroup.rotation.y;
+          if (Math.abs(diff) < 0.01) {
+            state.heartGroup.rotation.y = state.targetRotY;
+            state.isTweening = false;
+            if (onFaceSnapped) onFaceSnapped();
+          } else {
+            state.heartGroup.rotation.y += diff * 0.08;
+          }
+          // Return X rotation upright
+          state.heartGroup.rotation.x += (0 - state.heartGroup.rotation.x) * 0.08;
+        } else if (state.isDragging) {
+          // Dragging actively updates in handlePointerMove
+        } else if (state.userInteracting) {
+          // Inertia damping after drag release
           state.heartGroup.rotation.y += state.rotVelocityY;
           state.heartGroup.rotation.x += state.rotVelocityX;
-          state.rotVelocityY *= 0.94;
-          state.rotVelocityX *= 0.94;
+          state.rotVelocityY *= 0.90;
+          state.rotVelocityX *= 0.90;
+
+          // Clamp X rotation to prevent upside-down flips
+          state.heartGroup.rotation.x = Math.max(-0.38, Math.min(0.38, state.heartGroup.rotation.x));
+
+          if (Math.abs(state.rotVelocityY) < 0.0005 && Math.abs(state.rotVelocityX) < 0.0005) {
+            state.rotVelocityY = 0;
+            state.rotVelocityX = 0;
+            state.userInteracting = false;
+          }
+        } else {
+          // Gentle, soothing auto-spin when idle
+          if (isAutoSpinning) {
+            state.heartGroup.rotation.y += 0.004;
+          }
+          // Smooth floating levitation
+          state.heartGroup.position.y = 0.06 + Math.sin(elapsedTime * 1.3) * 0.04;
+          // Smoothly return X angle upright
+          state.heartGroup.rotation.x += (0 - state.heartGroup.rotation.x) * 0.04;
         }
       }
 
       // Orbital Rings Rotation
       if (state.orbitRing1 && state.orbitRing2) {
-        state.orbitRing1.rotation.z = elapsedTime * 0.25;
-        state.orbitRing2.rotation.z = -elapsedTime * 0.2;
+        state.orbitRing1.rotation.z = elapsedTime * 0.22;
+        state.orbitRing2.rotation.z = -elapsedTime * 0.18;
       }
 
       // Floating Stardust Movement
@@ -436,20 +416,12 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
 
     animate();
 
-    // 11. Cleanup on Unmount
+    // 10. Cleanup on Unmount
     return () => {
       cancelAnimationFrame(state.animFrameId);
       if (state.interactionTimer) clearTimeout(state.interactionTimer);
-
-      window.removeEventListener('mousedown', onMouseDown);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('resize', onWindowResize);
 
-      // Dispose Three.js objects
       heartGeometry.dispose();
       heartBodyMaterial.dispose();
       goldBevelMaterial.dispose();
@@ -466,7 +438,31 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
       particleMat.dispose();
       renderer.dispose();
     };
-  }, [coupleData]);
+  }, [coupleData, isAutoSpinning, onFaceSnapped]);
+
+  // Handle Preset Face Snapping (Groom / Bride)
+  useEffect(() => {
+    if (!targetFace || !stateRef.current.heartGroup) return;
+    const state = stateRef.current;
+    state.isTweening = true;
+    state.isDragging = false;
+    state.rotVelocityX = 0;
+    state.rotVelocityY = 0;
+
+    const currentY = state.heartGroup.rotation.y;
+    const twoPi = Math.PI * 2;
+    const normY = ((currentY % twoPi) + twoPi) % twoPi;
+
+    let target;
+    if (targetFace === 'groom') {
+      // nearest 0 radians
+      target = normY > Math.PI ? currentY + (twoPi - normY) : currentY - normY;
+    } else if (targetFace === 'bride') {
+      // nearest PI radians
+      target = currentY + (Math.PI - normY);
+    }
+    state.targetRotY = target;
+  }, [targetFace]);
 
   // Dynamic Camera Zoom adjustments when isUnlocked or is3DModeOnly changes
   useEffect(() => {
@@ -477,11 +473,11 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
     let targetZ;
 
     if (is3DModeOnly) {
-      targetZ = isMobile ? 4.8 : 3.6; // Closer dramatic inspection
+      targetZ = isMobile ? 3.35 : 3.5; // Close, majestic, fully readable on mobile
     } else if (isUnlocked) {
-      targetZ = isMobile ? 5.8 : 4.4;
+      targetZ = isMobile ? 4.8 : 4.4;
     } else {
-      targetZ = isMobile ? 8.6 : 6.8;
+      targetZ = isMobile ? 6.8 : 6.2;
     }
 
     const interval = setInterval(() => {
@@ -494,21 +490,90 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
         state.camera.position.z = targetZ;
         clearInterval(interval);
       } else {
-        state.camera.position.z += diff * 0.12;
+        state.camera.position.z += diff * 0.14;
       }
     }, 25);
 
     return () => clearInterval(interval);
   }, [isUnlocked, is3DModeOnly]);
 
+  // POINTER INTERACTIONS (Touch & Mouse unified, scoped to 3D mode only)
+  const handlePointerDown = (e) => {
+    if (!is3DModeOnly) return;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+
+    const state = stateRef.current;
+    state.isDragging = true;
+    state.userInteracting = true;
+    state.isTweening = false;
+    state.prevX = e.clientX;
+    state.prevY = e.clientY;
+    state.rotVelocityX = 0;
+    state.rotVelocityY = 0;
+
+    if (state.interactionTimer) clearTimeout(state.interactionTimer);
+  };
+
+  const handlePointerMove = (e) => {
+    const state = stateRef.current;
+    if (!state.isDragging || !state.heartGroup || !is3DModeOnly) return;
+
+    const deltaX = e.clientX - state.prevX;
+    const deltaY = e.clientY - state.prevY;
+
+    // Direct, responsive 1:1 rotation
+    state.heartGroup.rotation.y += deltaX * 0.007;
+    state.heartGroup.rotation.x += deltaY * 0.004;
+
+    // Strict clamp so the heart never flips upside down or inverted
+    state.heartGroup.rotation.x = Math.max(-0.38, Math.min(0.38, state.heartGroup.rotation.x));
+
+    state.rotVelocityY = deltaX * 0.004;
+    state.rotVelocityX = deltaY * 0.002;
+
+    state.prevX = e.clientX;
+    state.prevY = e.clientY;
+  };
+
+  const handlePointerUp = (e) => {
+    const state = stateRef.current;
+    if (!state.isDragging) return;
+    state.isDragging = false;
+
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+
+    // Limit maximum release speed so it never spins wildly
+    state.rotVelocityY = Math.max(-0.035, Math.min(0.035, state.rotVelocityY));
+    state.rotVelocityX = Math.max(-0.015, Math.min(0.015, state.rotVelocityX));
+
+    state.interactionTimer = setTimeout(() => {
+      state.userInteracting = false;
+    }, 1200);
+  };
+
   return (
     <div
       ref={containerRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
       style={{
         position: 'fixed',
         inset: 0,
         zIndex: is3DModeOnly ? 30 : 0,
         pointerEvents: is3DModeOnly ? 'auto' : 'none',
+        touchAction: 'none',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
         width: '100%',
         height: '100%'
       }}
@@ -519,7 +584,7 @@ export const Royal3DCanvas = ({ isUnlocked, is3DModeOnly, coupleData }) => {
           width: '100%',
           height: '100%',
           display: 'block',
-          pointerEvents: 'auto'
+          touchAction: 'none'
         }}
       />
     </div>

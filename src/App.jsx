@@ -28,6 +28,8 @@ export function App() {
   const [is3DModeOnly, setIs3DModeOnly] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [toast, setToast] = useState(null);
+  const [targetFace, setTargetFace] = useState(null);
+  const [isAutoSpinning, setIsAutoSpinning] = useState(true);
 
   // Subscribe to Sound Service audio playback state
   useEffect(() => {
@@ -79,6 +81,9 @@ export function App() {
         isUnlocked={isUnlocked}
         is3DModeOnly={is3DModeOnly}
         coupleData={weddingData.couple}
+        targetFace={targetFace}
+        onFaceSnapped={() => setTargetFace(null)}
+        isAutoSpinning={isAutoSpinning}
       />
 
       {/* Floating Notification Toast */}
@@ -98,6 +103,9 @@ export function App() {
       <Explore3DOverlay
         is3DModeOnly={is3DModeOnly}
         onExit3D={() => setIs3DModeOnly(false)}
+        onSelectFace={(face) => setTargetFace(face)}
+        isAutoSpinning={isAutoSpinning}
+        onToggleAutoSpin={() => setIsAutoSpinning((prev) => !prev)}
       />
 
       {/* Unsealed Wax Envelope Gate Overlay (Initial Step with Direct Bypass) */}

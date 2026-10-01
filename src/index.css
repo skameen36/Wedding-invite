@@ -1,0 +1,258 @@
+@import './styles/variables.css';
+@import './styles/animations.css';
+@import './styles/responsive.css';
+
+/* Global Resets */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--royal-950);
+  color: var(--gold-100);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  background-color: var(--royal-950);
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(13, 66, 49, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 85% 65%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(10, 52, 38, 0.35) 0%, transparent 55%);
+  selection-background-color: var(--gold-500);
+  selection-color: var(--royal-950);
+}
+
+::selection {
+  background: var(--gold-500);
+  color: var(--royal-950);
+}
+
+/* 2026 Ambient Celestial Glow Backdrops */
+.ambient-aurora-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: 
+    radial-gradient(circle at 25% 15%, rgba(20, 95, 72, 0.32) 0%, transparent 50%),
+    radial-gradient(circle at 80% 40%, rgba(212, 175, 55, 0.15) 0%, transparent 55%),
+    radial-gradient(circle at 30% 85%, rgba(14, 66, 50, 0.28) 0%, transparent 60%);
+  filter: blur(40px);
+}
+
+/* Islamic Geometric Jali Pattern */
+.jali-bg {
+  background-color: #031811;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.2) 1.5px, transparent 1.5px),
+    linear-gradient(45deg, rgba(212, 175, 55, 0.06) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(212, 175, 55, 0.06) 25%, transparent 25%);
+  background-size: 28px 28px;
+}
+
+/* Gold Gradient Typography */
+.gold-text-gradient {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.gold-text-glow {
+  text-shadow: 0 0 18px rgba(212, 175, 55, 0.65), 0 0 35px rgba(244, 227, 159, 0.4);
+}
+
+/* ============================================================
+   2026 CLAYMORPHISM SYSTEM (Tactile 3D Soft Inflated Pillows)
+   ============================================================ */
+
+.clay-card {
+  background: var(--clay-card-bg);
+  box-shadow: var(--clay-shadow-card);
+  border: 1.5px solid rgba(212, 175, 55, 0.42);
+  border-radius: 1.75rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+}
+
+.clay-card-elevated {
+  background: var(--clay-card-elevated-bg);
+  box-shadow: var(--clay-shadow-card);
+  border: 1.5px solid rgba(244, 227, 159, 0.5);
+  border-radius: 1.75rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+}
+
+.clay-pill {
+  background: var(--clay-emerald-pill);
+  box-shadow: var(--clay-shadow-pill);
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-pill:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 175, 55, 0.35), inset 0 3px 5px rgba(255, 255, 255, 0.45);
+}
+
+.clay-pill:active {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8), inset 0 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.clay-btn-gold {
+  background: var(--clay-gold-bg);
+  box-shadow: var(--clay-shadow-btn);
+  border: 2px solid #fff2b8;
+  color: #01110b;
+  font-family: var(--font-cinzel);
+  font-weight: 800;
+  border-radius: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-btn-gold:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 20px 38px -6px rgba(212, 175, 55, 0.7), 0 8px 20px rgba(0, 0, 0, 0.75), inset 0 3px 6px rgba(255, 255, 255, 0.95);
+  filter: brightness(1.06);
+}
+
+.clay-btn-gold:active {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: var(--clay-shadow-btn-active);
+}
+
+.clay-btn-emerald {
+  background: radial-gradient(130% 120% at 25% 20%, rgba(16, 75, 57, 0.95) 0%, rgba(6, 36, 26, 0.98) 75%, rgba(2, 16, 11, 1) 100%);
+  box-shadow: 0 12px 26px -6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2), inset 0 2.5px 4px rgba(255, 255, 255, 0.35), inset 0 -2.5px 5px rgba(0, 0, 0, 0.6);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  color: var(--gold-200);
+  border-radius: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-btn-emerald:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: var(--gold-400);
+  box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.85), 0 0 30px rgba(212, 175, 55, 0.35), inset 0 3px 5px rgba(255, 255, 255, 0.5);
+}
+
+.clay-btn-emerald:active {
+  transform: translateY(2px) scale(0.97);
+}
+
+.clay-tile {
+  background: radial-gradient(130% 120% at 20% 15%, rgba(12, 54, 41, 0.95) 0%, rgba(3, 20, 14, 0.98) 100%);
+  box-shadow: var(--clay-shadow-tile);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  border-radius: 1.15rem;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-tile:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: rgba(244, 227, 159, 0.7);
+  box-shadow: 0 16px 35px -6px rgba(0, 0, 0, 0.85), 0 0 28px rgba(212, 175, 55, 0.35), inset 0 3px 6px rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================
+   2026 NEO-GLASSMORPHISM SYSTEM
+   ============================================================ */
+
+.glass-emerald-dark {
+  background: rgba(4, 28, 20, 0.86);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+.glass-emerald-card {
+  background: rgba(6, 36, 26, 0.78);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+}
+
+.glass-crystal {
+  background: var(--glass-crystal-bg);
+  backdrop-filter: var(--glass-crystal-blur);
+  -webkit-backdrop-filter: var(--glass-crystal-blur);
+  border: var(--glass-crystal-border);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(212, 175, 55, 0.15);
+}
+
+.glass-island {
+  background: var(--glass-island-bg);
+  border: var(--glass-island-border);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 175, 55, 0.25);
+  border-radius: 9999px;
+}
+
+/* 3D Wax Seal Realistic Metallic Style */
+.wax-seal {
+  background: radial-gradient(circle at 35% 30%, #fff2b8 0%, #e5c158 28%, #b38828 65%, #66480c 100%);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75),
+              0 0 45px rgba(212, 175, 55, 0.65),
+              inset 0 3px 6px rgba(255, 255, 255, 0.9),
+              inset 0 -4px 9px rgba(92, 64, 10, 0.75);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+}
+
+.wax-seal:hover {
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.85),
+              0 0 65px rgba(244, 227, 159, 0.95),
+              inset 0 4px 8px rgba(255, 255, 255, 1);
+  transform: scale(1.08);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #010c07;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4af37 0%, #b8922c 100%);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f4e39f;
+}
+
+/* Smooth Tap states */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}

@@ -1,0 +1,1563 @@
+0
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Royal Wedding Invitation | Shaikh Mohammed & Syeda Maliha</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700;800;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Three.js CDN for 3D Visuals -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Lucide Icons & Confetti -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            royal: {
+              950: '#02100b',
+              900: '#05241b',
+              800: '#0a382b',
+              700: '#0f4c3a',
+              600: '#14634c',
+            },
+            gold: {
+              100: '#fefbf0',
+              200: '#f9f0ce',
+              300: '#f1df9c',
+              400: '#e4c465',
+              500: '#d4af37',
+              600: '#b89028',
+              700: '#8c6b16',
+            },
+            ivory: {
+              50: '#fffef9',
+              100: '#fcf8ec',
+              200: '#f7edd2',
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            playfair: ['Playfair Display', 'serif'],
+            script: ['"Great Vibes"', 'cursive'],
+            arabic: ['Amiri', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Golden gradient text & borders */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fffef9 0%, #f1df9c 25%, #d4af37 60%, #9e7514 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glass-emerald-dark {
+      background: rgba(4, 28, 21, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(212, 175, 55, 0.32);
+    }
+
+    .glass-card {
+      background: rgba(6, 36, 27, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(212, 175, 55, 0.28);
+    }
+
+    /* 3D Envelope Perspective & Unfolding Card Dynamics */
+    .envelope-perspective {
+      perspective: 1600px;
+    }
+
+    .envelope-box {
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .envelope-flap-top {
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 0.5s;
+      z-index: 30;
+    }
+
+    .envelope-open .envelope-flap-top {
+      transform: rotateX(180deg);
+      z-index: 5;
+    }
+
+    .envelope-card-slide {
+      transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, box-shadow 1s ease;
+      transform: translateY(0);
+      z-index: 10;
+    }
+
+    .envelope-open .envelope-card-slide {
+      transform: translateY(-56%) scale(1.03);
+      box-shadow: 0 25px 50px -12px rgba(212, 175, 55, 0.45);
+      z-index: 35;
+    }
+
+    /* 3D Wax Seal Realistic Metallic Relief */
+    .wax-seal {
+      background: radial-gradient(circle at 35% 30%, #fff0ad 0%, #e2be53 30%, #b38828 65%, #66480c 100%);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6),
+        0 0 35px rgba(212, 175, 55, 0.55),
+        inset 0 3px 5px rgba(255, 255, 255, 0.8),
+        inset 0 -4px 8px rgba(92, 64, 10, 0.7);
+      transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.5s ease;
+    }
+
+    .wax-seal:hover {
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7),
+        0 0 50px rgba(241, 223, 156, 0.8),
+        inset 0 3px 6px rgba(255, 255, 255, 0.9);
+      transform: scale(1.06);
+    }
+
+    /* Royal Seal Pulse */
+    @keyframes seal-breathe {
+
+      0%,
+      100% {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.5);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), 0 0 45px rgba(241, 223, 156, 0.85);
+        transform: scale(1.04);
+      }
+    }
+
+    .seal-pulse-glow {
+      animation: seal-breathe 2.6s infinite ease-in-out;
+    }
+
+    @keyframes tap-bounce {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+
+      35% {
+        transform: translateY(-7px) scale(1.1) rotate(-6deg);
+      }
+
+      65% {
+        transform: translateY(2px) scale(0.96) rotate(3deg);
+      }
+    }
+
+    @keyframes tap-ring {
+      0% {
+        transform: scale(0.7);
+        opacity: 0.9;
+      }
+
+      100% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    .animate-tap-hand {
+      animation: tap-bounce 1.3s infinite ease-in-out;
+      transform-origin: bottom right;
+    }
+
+    .tap-ring-pulse {
+      animation: tap-ring 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+    /* Traditional Islamic Jali Geometric Pattern */
+    .jali-pattern {
+      background-color: #042118;
+      background-image: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.22) 2px, transparent 2px),
+        linear-gradient(45deg, rgba(212, 175, 55, 0.08) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(212, 175, 55, 0.08) 25%, transparent 25%);
+      background-size: 32px 32px;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #02100b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d4af37;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-royal-950 text-gold-100 font-sans min-h-screen selection:bg-gold-500 selection:text-royal-950 overflow-x-hidden relative">
+
+  <!-- 3D Three.js Interactive WebGL Canvas -->
+  <div id="canvas-container" class="fixed inset-0 z-0 pointer-events-auto w-full h-full">
+    <canvas id="three-canvas" class="w-full h-full block"></canvas>
+  </div>
+
+  <!-- Custom Floating Toast -->
+  <div id="toast"
+    class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300 ease-out">
+    <div
+      class="glass-emerald-dark px-5 py-3 rounded-full border border-gold-400/50 shadow-2xl flex items-center space-x-3 text-gold-200 text-sm">
+      <span id="toast-icon" class="text-gold-400">✨</span>
+      <span id="toast-message" class="font-medium">Notification</span>
+    </div>
+  </div>
+
+  <!-- Floating Sticky Action Bar: Music, 3D Mode & Re-lock -->
+  <div id="sticky-bar"
+    class="fixed top-4 right-4 z-40 flex items-center gap-2 transition-opacity duration-500 opacity-0 pointer-events-none">
+    <!-- Explore 3D View Toggle -->
+    <button id="view-3d-toggle" aria-label="Toggle 3D View"
+      class="h-10 px-3.5 rounded-full glass-card flex items-center gap-1.5 text-xs text-gold-300 border border-gold-400/40 shadow-lg hover:border-gold-300 transition-transform active:scale-95">
+      <i data-lucide="compass" class="w-4 h-4 text-gold-400"></i>
+      <span class="hidden sm:inline font-cinzel text-[11px] tracking-wider uppercase" id="view-mode-text">Explore
+        3D</span>
+    </button>
+
+    <!-- Music Toggle -->
+    <button id="music-toggle" aria-label="Toggle Audio"
+      class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gold-300 border border-gold-400/40 shadow-lg hover:border-gold-300 transition-transform active:scale-95">
+      <i data-lucide="music-2" id="music-icon" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <!-- FLOATING EXIT 3D MODE BUTTON (Appears when 3D view is active) -->
+  <div id="exit-3d-banner"
+    class="fixed bottom-6 inset-x-0 z-40 flex justify-center pointer-events-none opacity-0 transition-all duration-500 transform translate-y-6">
+    <button id="exit-3d-btn"
+      class="pointer-events-auto px-6 py-3 rounded-full bg-royal-900/90 border-2 border-gold-400 text-gold-100 font-cinzel text-xs uppercase tracking-widest shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:bg-gold-500 hover:text-royal-950 transition-all flex items-center gap-2 active:scale-95">
+      <i data-lucide="arrow-left" class="w-4 h-4 text-gold-400 group-hover:text-royal-950"></i>
+      <span>Return to Invitation Details</span>
+    </button>
+  </div>
+
+  <!-- 3D ROYAL SEALED INVITATION CARD ENVELOPE OVERLAY -->
+  <div id="gate-overlay"
+    class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-royal-950/95 transition-opacity duration-1000 p-4">
+
+    <!-- Warm Ambient Radial Glow -->
+    <div class="absolute inset-0 bg-radial from-gold-500/15 via-royal-950 to-royal-950 pointer-events-none"></div>
+
+    <!-- 3D Perspective Stage -->
+    <div class="relative w-full max-w-md envelope-perspective flex flex-col items-center">
+
+      <!-- Top Calligraphy Title -->
+      <div id="gate-header" class="text-center mb-5 transition-all duration-700">
+        <span class="text-[11px] font-cinzel uppercase tracking-[0.35em] text-gold-400">Royal Wedding Invitation</span>
+        <h1 class="font-arabic text-2xl sm:text-3xl text-gold-300 mt-1 select-none" dir="rtl">بِسْمِ ٱللَّهِ
+          ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</h1>
+        <p class="font-playfair italic text-xs text-gold-200/80 mt-1">Break the golden wax seal to unseal the card</p>
+      </div>
+
+      <!-- The 3D Envelope Container -->
+      <div id="envelope-container"
+        class="envelope-box relative w-full aspect-[4/3] sm:h-72 rounded-2xl bg-[#031c14] border-2 border-gold-500/40 shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_40px_rgba(212,175,55,0.25)] flex items-center justify-center">
+
+        <!-- Ornate Gold Filigree Envelope Trim -->
+        <div
+          class="absolute inset-2.5 rounded-xl border border-gold-400/30 pointer-events-none jali-pattern opacity-40">
+        </div>
+
+        <!-- 3D SLIDING INNER ROYAL GOLD CARD -->
+        <div id="sliding-card"
+          class="envelope-card-slide absolute inset-x-4 inset-y-3 rounded-xl bg-gradient-to-b from-[#093528] via-[#052219] to-[#03150f] border-2 border-gold-400/80 p-5 flex flex-col items-center justify-between text-center overflow-hidden pointer-events-none">
+          <!-- Card Decorative Corner Accents -->
+          <div class="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-gold-400/70"></div>
+          <div class="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-gold-400/70"></div>
+          <div class="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-gold-400/70"></div>
+          <div class="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-gold-400/70"></div>
+
+          <!-- Card Header inside Envelope -->
+          <div class="pt-1">
+            <span class="text-[9px] font-cinzel uppercase tracking-[0.3em] text-gold-400">The Nikah Celebration</span>
+            <div class="font-script text-2xl sm:text-3xl text-gold-200 mt-1">Shaikh Mohammed</div>
+            <div class="text-[10px] font-cinzel text-gold-400/80 tracking-widest uppercase">&</div>
+            <div class="font-script text-2xl sm:text-3xl text-gold-200">Syeda Maliha</div>
+          </div>
+
+          <!-- Date Badge inside envelope -->
+          <div class="pb-1">
+            <div
+              class="inline-block px-3 py-1 rounded-full bg-royal-950/80 border border-gold-400/40 text-[10px] font-cinzel text-gold-300 tracking-wider">
+              13 · XII · 2026
+            </div>
+          </div>
+        </div>
+
+        <!-- ENVELOPE LOWER POCKET BODY (Covers the card initially) -->
+        <div
+          class="absolute inset-x-0 bottom-0 h-[64%] rounded-b-2xl bg-gradient-to-t from-[#02140d] via-[#05291e] to-[#093d2d] border-t border-gold-400/40 z-20 overflow-hidden flex items-end justify-center pb-3">
+          <!-- Subtle diagonal envelope fold lines -->
+          <div
+            class="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#d4af37_1px,transparent_1px)] [background-size:16px_16px]">
+          </div>
+          <span class="text-[9px] font-cinzel uppercase tracking-[0.3em] text-gold-400/60 z-20">Private &
+            Confidential</span>
+        </div>
+
+        <!-- 3D TOP FOLDING FLAP (Triangular peak that swings 180° open) -->
+        <div id="envelope-flap" class="envelope-flap-top absolute top-0 inset-x-0 h-1/2 flex justify-center">
+          <!-- Triangular SVG flap with gold trim and emerald fill -->
+          <svg class="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]" viewBox="0 0 400 150"
+            preserveAspectRatio="none">
+            <polygon points="0,0 400,0 200,150" fill="#072b20" stroke="#d4af37" stroke-width="2.5" />
+            <polygon points="12,2 388,2 200,140" fill="none" stroke="#f1df9c" stroke-width="0.8" opacity="0.4" />
+          </svg>
+        </div>
+
+        <!-- 3D LUXURY GOLD WAX SEAL (Centered at Flap Peak) -->
+        <div id="seal-assembly"
+          class="absolute z-40 top-[40%] flex flex-col items-center justify-center transition-all duration-700">
+
+          <!-- Wax Seal Button with Monogram -->
+          <button id="gate-unlock-btn" aria-label="Break Wax Seal"
+            class="wax-seal seal-pulse-glow relative w-20 h-20 sm:w-22 sm:h-22 rounded-full cursor-pointer flex flex-col items-center justify-center active:scale-95 group">
+
+            <!-- Ornate Outer Ridged Wax Ring -->
+            <div
+              class="absolute inset-1.5 rounded-full border-2 border-dashed border-[#ffe58f]/60 pointer-events-none group-hover:rotate-45 transition-transform duration-500">
+            </div>
+
+            <!-- Monogram & Seal Emblem -->
+            <span
+              class="font-cinzel text-base sm:text-lg font-black tracking-widest text-[#2d1f05] drop-shadow-[0_1px_1px_rgba(255,255,255,0.6)]">
+              M & M
+            </span>
+            <span class="text-[8px] font-cinzel uppercase tracking-widest text-[#4d370b] font-bold mt-0.5">
+              OPEN
+            </span>
+
+            <!-- Subtle ribbon tails hanging from seal -->
+            <div
+              class="absolute -bottom-3 left-3 w-3 h-5 bg-[#96701a] -rotate-12 rounded-b shadow -z-10 border border-gold-300/40">
+            </div>
+            <div
+              class="absolute -bottom-3 right-3 w-3 h-5 bg-[#785912] rotate-12 rounded-b shadow -z-10 border border-gold-300/40">
+            </div>
+          </button>
+
+          <!-- Animated Pointer Hand Hint -->
+          <div
+            class="mt-3 flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-royal-950/90 border border-gold-400/40 shadow-xl">
+            <span class="w-2 h-2 rounded-full bg-gold-400 animate-ping"></span>
+            <span class="font-cinzel text-[10px] text-gold-300 tracking-wider font-semibold">Tap Seal to Open
+              Card</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Experience Hint Footer -->
+      <div class="mt-5 text-center text-xs text-gold-400/75 flex items-center justify-center gap-1.5 font-sans">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-400"></i>
+        <span>Sound & 3D royal experience reveals upon unsealing</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAIN INVITATION CARD CONTENT OVERLAY -->
+  <main id="main-content"
+    class="relative z-20 max-w-xl mx-auto px-4 py-12 md:py-16 sm:px-6 transition-all duration-700 opacity-0 pointer-events-none">
+
+    <!-- Card Wrapper -->
+    <article
+      class="glass-emerald-dark rounded-3xl border border-gold-500/50 shadow-[0_0_50px_rgba(6,36,27,0.8)] p-6 sm:p-10 relative overflow-hidden">
+
+      <!-- Ornate Arabesque Golden Corners SVG -->
+      <svg class="absolute top-0 left-0 w-24 h-24 pointer-events-none text-gold-500/30" viewBox="0 0 100 100"
+        fill="currentColor">
+        <path d="M0,0 L100,0 C70,10 50,30 40,60 C35,45 25,35 0,30 Z" opacity="0.3"></path>
+        <path d="M4,4 L60,4 C50,15 35,25 25,45 C20,30 15,20 4,15 Z" fill="none" stroke="currentColor"
+          stroke-width="1.5"></path>
+      </svg>
+      <svg class="absolute top-0 right-0 w-24 h-24 pointer-events-none text-gold-500/30 transform scale-x-[-1]"
+        viewBox="0 0 100 100" fill="currentColor">
+        <path d="M0,0 L100,0 C70,10 50,30 40,60 C35,45 25,35 0,30 Z" opacity="0.3"></path>
+        <path d="M4,4 L60,4 C50,15 35,25 25,45 C20,30 15,20 4,15 Z" fill="none" stroke="currentColor"
+          stroke-width="1.5"></path>
+      </svg>
+      <svg class="absolute bottom-0 left-0 w-24 h-24 pointer-events-none text-gold-500/30 transform scale-y-[-1]"
+        viewBox="0 0 100 100" fill="currentColor">
+        <path d="M0,0 L100,0 C70,10 50,30 40,60 C35,45 25,35 0,30 Z" opacity="0.3"></path>
+      </svg>
+      <svg class="absolute bottom-0 right-0 w-24 h-24 pointer-events-none text-gold-500/30 transform scale-[-1]"
+        viewBox="0 0 100 100" fill="currentColor">
+        <path d="M0,0 L100,0 C70,10 50,30 40,60 C35,45 25,35 0,30 Z" opacity="0.3"></path>
+      </svg>
+
+      <!-- PROMINENT HIGH-VISIBILITY 3D HEART ACTION BUTTON WITH TAPPING HAND DESIGN -->
+      <div class="mb-7 text-center">
+        <button id="launch-3d-btn" type="button"
+          class="group relative w-full p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-royal-900 via-royal-800 to-royal-900 border-2 border-gold-400 shadow-[0_0_30px_rgba(212,175,55,0.35)] hover:shadow-[0_0_45px_rgba(212,175,55,0.65)] hover:border-gold-300 transition-all transform active:scale-98 overflow-hidden cursor-pointer">
+          <!-- Shimmer animated sweep overlay -->
+          <div
+            class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-gold-300/20 to-transparent pointer-events-none">
+          </div>
+
+          <div class="flex items-center justify-between gap-3">
+            <!-- Left: Orbiting icon & animated pulse -->
+            <div
+              class="relative shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-gold-500/20 border-2 border-gold-400/70 text-gold-300 shadow-inner">
+              <span class="absolute inset-0 rounded-full bg-gold-400/30 tap-ring-pulse pointer-events-none"></span>
+              <i data-lucide="orbit"
+                class="w-6 h-6 text-gold-300 group-hover:rotate-180 transition-transform duration-700"></i>
+            </div>
+
+            <!-- Center text call to action -->
+            <div class="text-left flex-1 pl-1">
+              <div class="flex items-center gap-2">
+                <span
+                  class="inline-block px-2 py-0.5 rounded-full bg-gold-500/25 border border-gold-400/50 text-[10px] uppercase tracking-widest font-cinzel text-gold-300 font-bold">
+                  Tap & Spin 360°
+                </span>
+                <span class="text-xs text-gold-400 animate-pulse">✨</span>
+              </div>
+              <span
+                class="block font-cinzel text-base sm:text-lg font-bold text-gold-100 tracking-wider group-hover:text-gold-200 mt-0.5 leading-snug">
+                VIEW 3D ROYAL HEART
+              </span>
+              <span class="block font-sans text-xs text-gold-300/80 mt-0.5">
+                Shaikh Mohammed & Syeda Maliha
+              </span>
+            </div>
+
+            <!-- Right: Animated Pointing/Tapping Hand Indicator -->
+            <div class="relative shrink-0 flex flex-col items-center justify-center pl-2">
+              <!-- Radial click echo ring behind hand -->
+              <span
+                class="absolute -top-1 right-2 w-6 h-6 rounded-full border border-gold-400/60 tap-ring-pulse pointer-events-none"></span>
+
+              <div class="animate-tap-hand p-1 text-gold-300 group-hover:text-gold-100">
+                <!-- Ornate Tapping Hand Pointer SVG -->
+                <svg class="w-8 h-8 sm:w-9 sm:h-9 filter drop-shadow-[0_2px_8px_rgba(212,175,55,0.7)]"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
+                  <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
+                  <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
+                  <path
+                    d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
+                  <path d="M6 3 L3 6" stroke-width="1.5" stroke="#f1df9c" />
+                  <path d="M12 1 L12 0" stroke-width="1.5" stroke="#f1df9c" />
+                </svg>
+              </div>
+
+              <!-- Clear label beneath hand -->
+              <span
+                class="font-cinzel text-[10px] font-black tracking-wider uppercase text-gold-300 group-hover:text-gold-200 mt-0.5 bg-royal-950/80 px-2 py-0.5 rounded border border-gold-400/40">
+                CLICK HERE
+              </span>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <!-- BISMILLAH & SACRED OPENING -->
+      <header class="text-center space-y-4">
+        <div
+          class="inline-block px-4 py-1 rounded-full border border-gold-500/40 bg-royal-900/80 text-gold-300 text-[11px] uppercase tracking-[0.25em] font-cinzel">
+          In The Name of Allah, The Most Gracious, The Most Merciful
+        </div>
+
+        <div class="font-arabic text-3xl sm:text-4xl text-gold-300 py-1 leading-relaxed select-none" dir="rtl">
+          بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+        </div>
+
+        <p
+          class="font-playfair italic text-xs sm:text-sm text-gold-200/90 max-w-sm mx-auto leading-relaxed border-t border-b border-gold-500/20 py-2.5">
+          "And among His signs is that He created for you mates from among yourselves, that you may dwell in peace with
+          them, and He put love and mercy between your hearts."
+          <span class="block text-[11px] font-cinzel text-gold-400 not-italic mt-1">— Surah Ar-Rum (30:21)</span>
+        </p>
+
+        <div class="pt-1">
+          <p class="font-cinzel text-xs uppercase tracking-[0.25em] text-gold-400">
+            Together with their families
+          </p>
+          <p class="font-playfair text-base sm:text-lg text-ivory-100 mt-1 leading-relaxed">
+            request the pleasure of your company at the auspicious occasion of the <span
+              class="text-gold-300 font-semibold italic">Nikah</span> ceremony of
+          </p>
+        </div>
+      </header>
+
+      <!-- BRIDE & GROOM ROYAL PRESENTATION -->
+      <section class="my-8 text-center relative">
+        <div class="absolute inset-0 bg-gold-500/5 blur-3xl rounded-full pointer-events-none"></div>
+
+        <!-- Groom Card -->
+        <div
+          class="p-5 rounded-2xl glass-card border border-gold-500/40 shadow-lg relative group transition-all hover:border-gold-400/70">
+          <span class="text-[10px] uppercase font-cinzel tracking-[0.3em] text-gold-400">The Groom</span>
+          <h2 class="font-cinzel text-2xl sm:text-3xl font-bold gold-gradient-text mt-1 tracking-wide">
+            Shaikh Mohammed
+          </h2>
+          <p class="text-sm font-sans text-gold-200/90 mt-1">
+            Son of <strong class="text-ivory-100 font-medium">Shaikh Abdullah</strong>
+          </p>
+          <p class="text-xs text-gold-400/80 font-sans flex items-center justify-center gap-1 mt-1">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold-400"></i>
+            Camp Area, Amravati
+          </p>
+        </div>
+
+        <!-- Monogram / Weds Separator -->
+        <div class="py-4 flex items-center justify-center gap-3">
+          <div class="h-[1px] bg-gradient-to-r from-transparent via-gold-400/50 to-transparent flex-1"></div>
+          <div
+            class="w-14 h-14 rounded-full border border-gold-400/60 bg-royal-900/90 flex flex-col items-center justify-center shadow-lg">
+            <span class="font-script text-2xl text-gold-300 leading-none">Weds</span>
+          </div>
+          <div class="h-[1px] bg-gradient-to-r from-transparent via-gold-400/50 to-transparent flex-1"></div>
+        </div>
+
+        <!-- Bride Card -->
+        <div
+          class="p-5 rounded-2xl glass-card border border-gold-500/40 shadow-lg relative group transition-all hover:border-gold-400/70">
+          <span class="text-[10px] uppercase font-cinzel tracking-[0.3em] text-gold-400">The Bride</span>
+          <h2 class="font-cinzel text-2xl sm:text-3xl font-bold gold-gradient-text mt-1 tracking-wide">
+            Syeda Maliha
+          </h2>
+          <p class="text-sm font-sans text-gold-200/90 mt-1">
+            Daughter of <strong class="text-ivory-100 font-medium">Syed Sharafat Ali</strong>
+          </p>
+          <p class="text-xs text-gold-400/80 font-sans flex items-center justify-center gap-1 mt-1">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold-400"></i>
+            Barsi Takli, Dist. Akola
+          </p>
+        </div>
+      </section>
+
+      <!-- AUSPICIOUS DATE & LIVE COUNTDOWN -->
+      <section class="my-8 text-center">
+        <div
+          class="inline-flex flex-col items-center justify-center px-6 py-3 rounded-2xl bg-royal-900/90 border border-gold-500/40 shadow-inner mb-6">
+          <span class="font-cinzel text-xs text-gold-400 tracking-[0.25em] uppercase">Insha'Allah</span>
+          <div class="font-playfair text-xl sm:text-2xl font-bold text-gold-200 mt-0.5">
+            Sunday, 13th December 2026
+          </div>
+          <span class="text-xs text-gold-300/80 font-sans mt-0.5">2:00 PM onwards | Followed by Royal Walima
+            Feast</span>
+        </div>
+
+        <!-- Countdown Timer -->
+        <div class="grid grid-cols-4 gap-2 sm:gap-3 max-w-sm mx-auto">
+          <div class="glass-card rounded-2xl p-2.5 sm:p-3 border border-gold-500/30 text-center shadow-md">
+            <span id="timer-days" class="block font-cinzel text-2xl sm:text-3xl font-bold text-gold-300">00</span>
+            <span class="block text-[10px] uppercase tracking-wider text-gold-200/80 font-cinzel">Days</span>
+          </div>
+          <div class="glass-card rounded-2xl p-2.5 sm:p-3 border border-gold-500/30 text-center shadow-md">
+            <span id="timer-hours" class="block font-cinzel text-2xl sm:text-3xl font-bold text-gold-300">00</span>
+            <span class="block text-[10px] uppercase tracking-wider text-gold-200/80 font-cinzel">Hours</span>
+          </div>
+          <div class="glass-card rounded-2xl p-2.5 sm:p-3 border border-gold-500/30 text-center shadow-md">
+            <span id="timer-minutes" class="block font-cinzel text-2xl sm:text-3xl font-bold text-gold-300">00</span>
+            <span class="block text-[10px] uppercase tracking-wider text-gold-200/80 font-cinzel">Mins</span>
+          </div>
+          <div class="glass-card rounded-2xl p-2.5 sm:p-3 border border-gold-500/30 text-center shadow-md">
+            <span id="timer-seconds" class="block font-cinzel text-2xl sm:text-3xl font-bold text-gold-400">00</span>
+            <span class="block text-[10px] uppercase tracking-wider text-gold-200/80 font-cinzel">Secs</span>
+          </div>
+        </div>
+
+        <!-- Add to Calendar Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+          <button id="google-cal-btn"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gold-500/20 hover:bg-gold-500/30 border border-gold-400/50 text-gold-200 text-xs font-medium transition-all shadow active:scale-95">
+            <i data-lucide="calendar-plus" class="w-4 h-4 text-gold-400"></i>
+            <span>Add to Google Calendar</span>
+          </button>
+          <button id="apple-cal-btn"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gold-500/20 hover:bg-gold-500/30 border border-gold-400/50 text-gold-200 text-xs font-medium transition-all shadow active:scale-95">
+            <i data-lucide="calendar" class="w-4 h-4 text-gold-400"></i>
+            <span>Apple / .ICS Invite</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- VENUE & NAVIGATION CARD -->
+      <section class="my-8">
+        <div
+          class="glass-card rounded-2xl p-6 border border-gold-500/40 relative overflow-hidden shadow-xl text-center">
+          <div
+            class="w-12 h-12 rounded-full bg-royal-900 border border-gold-400/50 flex items-center justify-center mx-auto mb-3 text-gold-300">
+            <i data-lucide="map-pin" class="w-6 h-6"></i>
+          </div>
+
+          <span class="text-[11px] font-cinzel tracking-[0.25em] text-gold-400 uppercase">Venue & Location</span>
+          <h3 class="font-cinzel text-xl sm:text-2xl font-bold text-ivory-100 mt-1">
+            Dada Hayat Qalandar Function Hall
+          </h3>
+          <p class="text-sm text-gold-200/90 font-sans mt-1">
+            Near New Bus Stand, Barsi Takli, Dist. Akola, Maharashtra
+          </p>
+
+          <div class="mt-5">
+            <a href="https://maps.google.com/?q=Dada+Hayat+Qalandar+Function+Hall+Barsi+Takli" target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-royal-950 font-semibold text-sm shadow-lg hover:brightness-110 active:scale-95 transition-all">
+              <i data-lucide="navigation-2" class="w-4 h-4 text-royal-950 fill-current"></i>
+              <span>Open in Google Maps</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- GUESTBOOK: SEND WISHES & DUAS -->
+      <section class="my-8">
+        <div class="glass-card rounded-2xl p-6 border border-gold-500/30 shadow-lg">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <i data-lucide="heart-handshake" class="w-5 h-5 text-gold-400"></i>
+              <h3 class="font-cinzel text-lg font-bold text-gold-200">Send Wishes & Duas</h3>
+            </div>
+            <span class="text-[11px] font-sans text-gold-400" id="wishes-count">3 Blessings</span>
+          </div>
+
+          <!-- Quick Dua Buttons -->
+          <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1 text-base">
+            <span class="text-xs text-gold-300/70 font-sans whitespace-nowrap">Quick Dua:</span>
+            <button type="button"
+              class="quick-blessing px-2.5 py-1 rounded-lg bg-royal-900 border border-gold-500/30 text-xs hover:border-gold-300 transition-colors"
+              data-dua="Barakallahu lakuma wa baraka alaikuma 🤲">
+              🤲 BarakAllah
+            </button>
+            <button type="button"
+              class="quick-blessing px-2.5 py-1 rounded-lg bg-royal-900 border border-gold-500/30 text-xs hover:border-gold-300 transition-colors"
+              data-dua="Heartiest congratulations & lots of love! 💐">
+              💐 Mubarak
+            </button>
+            <button type="button"
+              class="quick-blessing px-2.5 py-1 rounded-lg bg-royal-900 border border-gold-500/30 text-xs hover:border-gold-300 transition-colors"
+              data-dua="May Allah bless this beautiful union with happiness 🌸">
+              🌸 Best Wishes
+            </button>
+          </div>
+
+          <!-- Interactive Dua Form -->
+          <form id="dua-form" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <input type="text" id="guest-name" required placeholder="Your Name / Family"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-royal-900/80 border border-gold-500/30 text-gold-100 placeholder-gold-400/50 text-sm focus:outline-none focus:border-gold-400">
+              <input type="text" id="guest-city" placeholder="Your City (e.g. Amravati, Akola)"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-royal-900/80 border border-gold-500/30 text-gold-100 placeholder-gold-400/50 text-sm focus:outline-none focus:border-gold-400">
+            </div>
+            <textarea id="guest-message" rows="2" required placeholder="Write your heartfelt blessing or Dua..."
+              class="w-full px-3.5 py-2 rounded-xl bg-royal-900/80 border border-gold-500/30 text-gold-100 placeholder-gold-400/50 text-sm focus:outline-none focus:border-gold-400"></textarea>
+
+            <button type="submit"
+              class="w-full py-2.5 rounded-xl bg-gold-500 text-royal-950 font-semibold text-sm hover:bg-gold-400 transition-colors active:scale-95 shadow flex items-center justify-center gap-2">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>Send Your Dua</span>
+            </button>
+          </form>
+
+          <!-- Wishes Stream -->
+          <div id="wishes-list" class="mt-5 space-y-2.5 max-h-56 overflow-y-auto pr-1">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SHARE INVITATION SECTION -->
+      <footer class="mt-8 pt-6 border-t border-gold-500/30 text-center space-y-4">
+        <p class="font-cinzel text-xs text-gold-300 tracking-wider uppercase">Share the Joy With Relatives & Friends</p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button id="whatsapp-share-btn"
+            class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
+            <span>Share on WhatsApp</span>
+          </button>
+
+          <button id="copy-link-btn"
+            class="w-full sm:w-auto px-5 py-3 rounded-xl glass-card hover:border-gold-300 border border-gold-500/40 text-gold-200 font-medium text-sm flex items-center justify-center gap-2 active:scale-95 transition-all">
+            <i data-lucide="copy" class="w-4 h-4 text-gold-400"></i>
+            <span>Copy Invitation Link</span>
+          </button>
+        </div>
+
+        <div class="pt-6 text-center space-y-1">
+          <p class="font-script text-3xl text-gold-300">Shukran Jazilan</p>
+          <p class="text-xs text-gold-400/80 font-cinzel tracking-widest uppercase">
+            Shaikh & Syed Families Look Forward to Welcoming You
+          </p>
+        </div>
+      </footer>
+
+    </article>
+  </main>
+
+  <script>
+    // Lucide Icons initialization
+    lucide.createIcons();
+
+    /* ----------------------------------------------------
+       1. INTERACTIVE 3D THREE.JS ROYAL HEART SCENE
+       - Sculpted 3D extruded Heart with metallic emerald & gold finish
+       - Side 1: Groom's Name (Shaikh Mohammed)
+       - Side 2: Bride's Name (Syeda Maliha)
+       - Orbiting golden halo rings with glowing light jewels
+       - Floating starlight/gold dust and interactive drag-to-spin
+    ---------------------------------------------------- */
+    let scene, camera, renderer;
+    let heartGroup, heartMesh;
+    let orbitRing1, orbitRing2;
+    let particleSystem;
+
+    // Drag and rotation control variables
+    let isDragging = false;
+    let previousPointerX = 0;
+    let previousPointerY = 0;
+    let heartRotationVelocity = 0.008;
+    let heartTiltVelocity = 0;
+    let userInteracting = false;
+    let interactionTimeout = null;
+
+    function createNameMedallionTexture(role, name, subtitle, arabicHonorific) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext('2d');
+
+      // Circular medallion background with rich emerald and vignette
+      const radGrad = ctx.createRadialGradient(512, 512, 120, 512, 512, 490);
+      radGrad.addColorStop(0, '#0a382b');
+      radGrad.addColorStop(0.65, '#05241b');
+      radGrad.addColorStop(1, '#02100b');
+
+      ctx.fillStyle = radGrad;
+      ctx.beginPath();
+      ctx.arc(512, 512, 480, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Outer gold filigree ring
+      ctx.lineWidth = 14;
+      ctx.strokeStyle = '#d4af37';
+      ctx.beginPath();
+      ctx.arc(512, 512, 460, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Inner thin gold ring
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#f9f0ce';
+      ctx.beginPath();
+      ctx.arc(512, 512, 435, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Islamic corner star flourishes
+      for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 4) {
+        const x = 512 + Math.cos(angle) * 448;
+        const y = 512 + Math.sin(angle) * 448;
+        ctx.fillStyle = '#f1df9c';
+        ctx.beginPath();
+        ctx.arc(x, y, 7, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Arabic Calligraphy Honorific
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#f1df9c';
+      ctx.font = 'bold 52px "Amiri", serif';
+      ctx.fillText(arabicHonorific, 512, 280);
+
+      // Role (THE GROOM / THE BRIDE)
+      ctx.fillStyle = '#d4af37';
+      ctx.font = '600 36px "Cinzel", serif';
+      ctx.fillText(role.toUpperCase(), 512, 380);
+
+      // Decorative divider
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(330, 420);
+      ctx.lineTo(694, 420);
+      ctx.stroke();
+
+      // Couple Name with warm gold glow
+      ctx.fillStyle = '#fffef9';
+      ctx.font = 'bold 64px "Playfair Display", serif';
+      ctx.shadowColor = 'rgba(212, 175, 55, 0.85)';
+      ctx.shadowBlur = 26;
+      ctx.fillText(name, 512, 510);
+      ctx.shadowBlur = 0;
+
+      // Subtitle / Family lineage
+      ctx.fillStyle = '#f9f0ce';
+      ctx.font = '32px "Inter", sans-serif';
+      ctx.fillText(subtitle, 512, 600);
+
+      // Date Monogram
+      ctx.fillStyle = '#d4af37';
+      ctx.font = 'italic 34px "Cinzel", serif';
+      ctx.fillText('13 · XII · 2026', 512, 700);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      return texture;
+    }
+
+    function initThreeJS() {
+      const container = document.getElementById('canvas-container');
+      const canvas = document.getElementById('three-canvas');
+
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x02100b, 0.035);
+
+      const isMobile = window.innerWidth < 640;
+      // Increased distance to comfortably fit entire heart, rings, and medallions
+      const initialZ = isMobile ? 8.6 : 6.8;
+
+      camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 0.2, initialZ);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.35;
+
+      // Ambient & Directional Warm Studio Lighting
+      const ambientLight = new THREE.AmbientLight(0x0a382b, 1.8);
+      scene.add(ambientLight);
+
+      const goldSunLight = new THREE.DirectionalLight(0xfff3cc, 2.0);
+      goldSunLight.position.set(4, 6, 5);
+      scene.add(goldSunLight);
+
+      const backLight = new THREE.DirectionalLight(0xd4af37, 1.6);
+      backLight.position.set(-4, -3, -5);
+      scene.add(backLight);
+
+      const rimLight = new THREE.PointLight(0xffdf80, 2.5, 12);
+      rimLight.position.set(0, 3, 2);
+      scene.add(rimLight);
+
+      // Create Parent Group for the 3D Heart system
+      heartGroup = new THREE.Group();
+      heartGroup.position.set(0, 0.08, 0);
+      scene.add(heartGroup);
+
+      // Mathematically sculpted smooth 2D Heart Curve
+      const heartShape = new THREE.Shape();
+      heartShape.moveTo(0, 0.7);
+      heartShape.bezierCurveTo(0.2, 1.3, 1.15, 1.75, 1.75, 1.15);
+      heartShape.bezierCurveTo(2.25, 0.65, 2.15, -0.15, 1.45, -0.85);
+      heartShape.bezierCurveTo(0.85, -1.45, 0.25, -2.05, 0, -2.4);
+      heartShape.bezierCurveTo(-0.25, -2.05, -0.85, -1.45, -1.45, -0.85);
+      heartShape.bezierCurveTo(-2.15, -0.15, -2.25, 0.65, -1.75, 1.15);
+      heartShape.bezierCurveTo(-1.15, 1.75, -0.2, 1.3, 0, 0.7);
+
+      const extrudeSettings = {
+        depth: 0.52,
+        bevelEnabled: true,
+        bevelSegments: 8,
+        steps: 2,
+        bevelSize: 0.15,
+        bevelThickness: 0.15
+      };
+
+      const heartGeometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+      heartGeometry.center();
+
+      // Royal Emerald & Gold Shimmering Materials
+      const heartMaterial = new THREE.MeshStandardMaterial({
+        color: 0x063324,
+        roughness: 0.22,
+        metalness: 0.7,
+      });
+
+      const goldBevelMaterial = new THREE.MeshStandardMaterial({
+        color: 0xd4af37,
+        roughness: 0.18,
+        metalness: 0.92,
+      });
+
+      // Compact scale so the heart never overflows or clips on mobile screens
+      const baseScale = isMobile ? 0.48 : 0.68;
+      heartMesh = new THREE.Mesh(heartGeometry, [heartMaterial, goldBevelMaterial]);
+      heartMesh.scale.set(baseScale, baseScale, baseScale);
+      heartGroup.add(heartMesh);
+
+      // Side 1: Groom (Facing Front: +Z)
+      const groomTexture = createNameMedallionTexture(
+        "The Groom",
+        "Shaikh Mohammed",
+        "Son of Shaikh Abdullah",
+        "العريس المبارك"
+      );
+
+      const medallionGeo = new THREE.CircleGeometry(1.05, 64);
+      const groomMat = new THREE.MeshBasicMaterial({
+        map: groomTexture,
+        transparent: true,
+        side: THREE.FrontSide
+      });
+      const groomMedallion = new THREE.Mesh(medallionGeo, groomMat);
+      const medallionScale = isMobile ? 0.55 : 0.76;
+      groomMedallion.scale.set(medallionScale, medallionScale, medallionScale);
+      groomMedallion.position.set(0, 0.05, 0.35 * (isMobile ? 0.7 : 0.9));
+      heartGroup.add(groomMedallion);
+
+      // Side 2: Bride (Facing Back: -Z, rotated 180 degrees)
+      const brideTexture = createNameMedallionTexture(
+        "The Bride",
+        "Syeda Maliha",
+        "Dau. of Syed Sharafat Ali",
+        "العروس المصونة"
+      );
+
+      const brideMat = new THREE.MeshBasicMaterial({
+        map: brideTexture,
+        transparent: true,
+        side: THREE.FrontSide
+      });
+      const brideMedallion = new THREE.Mesh(medallionGeo, brideMat);
+      brideMedallion.scale.set(medallionScale, medallionScale, medallionScale);
+      brideMedallion.position.set(0, 0.05, -0.35 * (isMobile ? 0.7 : 0.9));
+      brideMedallion.rotation.y = Math.PI; // Invert to face backward
+      heartGroup.add(brideMedallion);
+
+      // Golden Orbital Rings around the Heart scaled down proportionally
+      const ringRadius = isMobile ? 1.35 : 1.85;
+      const ringGeo = new THREE.TorusGeometry(ringRadius, 0.02, 16, 100);
+      const ringMat = new THREE.MeshStandardMaterial({
+        color: 0xf1df9c,
+        metalness: 0.9,
+        roughness: 0.2
+      });
+
+      orbitRing1 = new THREE.Mesh(ringGeo, ringMat);
+      orbitRing1.rotation.x = Math.PI * 0.35;
+      orbitRing1.rotation.y = Math.PI * 0.2;
+      scene.add(orbitRing1);
+
+      orbitRing2 = new THREE.Mesh(ringGeo, ringMat);
+      orbitRing2.rotation.x = -Math.PI * 0.35;
+      orbitRing2.rotation.y = -Math.PI * 0.25;
+      orbitRing2.scale.set(1.12, 1.12, 1.12);
+      scene.add(orbitRing2);
+
+      // Orbiting Jewel Bead on Ring 1
+      const jewelGeo = new THREE.SphereGeometry(0.09, 16, 16);
+      const jewelMat = new THREE.MeshBasicMaterial({ color: 0xfff6d0 });
+      const jewel1 = new THREE.Mesh(jewelGeo, jewelMat);
+      jewel1.position.set(ringRadius, 0, 0);
+      orbitRing1.add(jewel1);
+
+      // Floating Gold Dust Particle Field
+      const particleCount = 260;
+      const particleGeo = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 16;
+        positions[i + 1] = Math.random() * 10 - 5;
+        positions[i + 2] = (Math.random() - 0.5) * 12;
+      }
+
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        color: 0xf1df9c,
+        size: 0.075,
+        transparent: true,
+        opacity: 0.85,
+        blending: THREE.AdditiveBlending
+      });
+
+      particleSystem = new THREE.Points(particleGeo, particleMat);
+      scene.add(particleSystem);
+
+      window.addEventListener('resize', onWindowResize);
+      setupInteractiveHeartControls();
+    }
+
+    function setupInteractiveHeartControls() {
+      const onPointerDown = (clientX, clientY) => {
+        isDragging = true;
+        userInteracting = true;
+        previousPointerX = clientX;
+        previousPointerY = clientY;
+        if (interactionTimeout) clearTimeout(interactionTimeout);
+      };
+
+      const onPointerMove = (clientX, clientY) => {
+        if (!isDragging || !heartGroup) return;
+
+        const deltaX = clientX - previousPointerX;
+        const deltaY = clientY - previousPointerY;
+
+        heartRotationVelocity = deltaX * 0.007;
+        heartTiltVelocity = deltaY * 0.004;
+
+        heartGroup.rotation.y += heartRotationVelocity;
+        heartGroup.rotation.x += heartTiltVelocity;
+
+        previousPointerX = clientX;
+        previousPointerY = clientY;
+      };
+
+      const onPointerUp = () => {
+        isDragging = false;
+        // Resume gentle auto-rotation after 1.8 seconds of inactivity
+        interactionTimeout = setTimeout(() => {
+          userInteracting = false;
+        }, 1800);
+      };
+
+      // Mouse events
+      window.addEventListener('mousedown', (e) => onPointerDown(e.clientX, e.clientY));
+      window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
+      window.addEventListener('mouseup', onPointerUp);
+
+      // Touch events (Mobile friendly)
+      window.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0) {
+          onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+          onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', onPointerUp);
+    }
+
+    function onWindowResize() {
+      if (!camera || !renderer) return;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const isMobile = window.innerWidth < 640;
+      if (!isUnlocked) {
+        camera.position.z = isMobile ? 8.6 : 6.8;
+      } else {
+        camera.position.z = isMobile ? 5.8 : 4.4;
+      }
+    }
+
+    let clock = new THREE.Clock();
+    function animateThreeJS() {
+      requestAnimationFrame(animateThreeJS);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      if (heartGroup) {
+        if (!userInteracting) {
+          // Smooth perpetual rotation to display both Groom and Bride alternately
+          heartGroup.rotation.y += 0.0075;
+          // Gentle floating bob
+          heartGroup.position.y = 0.1 + Math.sin(elapsedTime * 1.5) * 0.08;
+          // Smooth return to level upright tilt
+          heartGroup.rotation.x += (Math.sin(elapsedTime * 0.8) * 0.06 - heartGroup.rotation.x) * 0.05;
+        } else if (!isDragging) {
+          // Inertia damping after drag release
+          heartGroup.rotation.y += heartRotationVelocity;
+          heartGroup.rotation.x += heartTiltVelocity;
+          heartRotationVelocity *= 0.94;
+          heartTiltVelocity *= 0.94;
+        }
+      }
+
+      // Rotate orbital rings
+      if (orbitRing1 && orbitRing2) {
+        orbitRing1.rotation.z = elapsedTime * 0.25;
+        orbitRing2.rotation.z = -elapsedTime * 0.2;
+      }
+
+      // Float stardust upward
+      if (particleSystem) {
+        const pos = particleSystem.geometry.attributes.position.array;
+        for (let i = 1; i < pos.length; i += 3) {
+          pos[i] += 0.006;
+          if (pos[i] > 6) {
+            pos[i] = -5;
+          }
+        }
+        particleSystem.geometry.attributes.position.needsUpdate = true;
+        particleSystem.rotation.y = elapsedTime * 0.02;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    /* ----------------------------------------------------
+       2. SYNTHESIZED ROYAL AMBIENT AUDIO (No external MP3)
+    ---------------------------------------------------- */
+    let audioCtx = null;
+    let isAudioPlaying = false;
+    let audioTimer = null;
+
+    // Raga/Acoustic Eastern notes for auspicious celebration
+    const scale = [220, 247.5, 277.18, 329.63, 370, 440, 495, 554.37, 659.25];
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playBellChime(freq, time, duration = 2.0) {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, time);
+
+        gain.gain.setValueAtTime(0, time);
+        gain.gain.linearRampToValueAtTime(0.08, time + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(time);
+        osc.stop(time + duration);
+      } catch (err) {
+        console.error("Synth note error", err);
+      }
+    }
+
+    function playGateUnlockSound() {
+      initAudioContext();
+      if (!audioCtx) return;
+      // Majestic chime chord (F# - C# - A#)
+      const now = audioCtx.currentTime;
+      playBellChime(370, now, 2.5);
+      playBellChime(554.37, now + 0.15, 2.5);
+      playBellChime(740, now + 0.3, 3.0);
+    }
+
+    function startBackgroundMelody() {
+      if (!audioCtx) initAudioContext();
+      isAudioPlaying = true;
+      document.getElementById('music-toggle').classList.add('border-gold-300', 'bg-gold-500/20');
+
+      let step = 0;
+      const melody = [
+        scale[2], scale[4], scale[5], scale[7],
+        scale[5], scale[4], scale[2], scale[0],
+        scale[3], scale[5], scale[7], scale[8]
+      ];
+
+      audioTimer = setInterval(() => {
+        if (!isAudioPlaying || !audioCtx) return;
+        const now = audioCtx.currentTime;
+        const note = melody[step % melody.length];
+        playBellChime(note, now, 2.2);
+
+        if (step % 3 === 0) {
+          playBellChime(note * 1.5, now + 0.25, 2.0);
+        }
+        step++;
+      }, 980);
+    }
+
+    function stopBackgroundMelody() {
+      isAudioPlaying = false;
+      if (audioTimer) clearInterval(audioTimer);
+      document.getElementById('music-toggle').classList.remove('border-gold-300', 'bg-gold-500/20');
+    }
+
+    document.getElementById('music-toggle').addEventListener('click', () => {
+      initAudioContext();
+      if (isAudioPlaying) {
+        stopBackgroundMelody();
+        showToast("Melody muted", "🔇");
+      } else {
+        startBackgroundMelody();
+        showToast("Royal melody playing", "🎶");
+      }
+    });
+
+    /* ----------------------------------------------------
+       3. 3D ENVELOPE CARD UNSEALING SEQUENCE
+    ---------------------------------------------------- */
+    const unlockBtn = document.getElementById('gate-unlock-btn');
+    const gateOverlay = document.getElementById('gate-overlay');
+    const mainContent = document.getElementById('main-content');
+    const stickyBar = document.getElementById('sticky-bar');
+    const gateHeader = document.getElementById('gate-header');
+    const sealAssembly = document.getElementById('seal-assembly');
+    const envelopeContainer = document.getElementById('envelope-container');
+
+    let isUnlocked = false;
+
+    unlockBtn.addEventListener('click', () => {
+      if (isUnlocked) return;
+      isUnlocked = true;
+
+      // 1. Play royal harmonic chime & start music
+      playGateUnlockSound();
+      setTimeout(startBackgroundMelody, 800);
+
+      // 2. Confetti sparkle burst radiating from the wax seal
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 95,
+          spread: 85,
+          origin: { y: 0.52 },
+          colors: ['#d4af37', '#f1df9c', '#ffffff', '#14634c', '#e4c465']
+        });
+      }
+
+      // 3. Realistic Wax Seal Break Animation
+      unlockBtn.style.transform = 'scale(1.25) rotate(15deg)';
+      unlockBtn.style.boxShadow = '0 0 50px rgba(255, 235, 140, 1)';
+
+      setTimeout(() => {
+        unlockBtn.style.transform = 'scale(0) rotate(-45deg)';
+        unlockBtn.style.opacity = '0';
+        sealAssembly.style.opacity = '0';
+        sealAssembly.style.pointerEvents = 'none';
+        gateHeader.style.opacity = '0';
+      }, 250);
+
+      // 4. Trigger 3D Flap Opening & Card Sliding Out
+      setTimeout(() => {
+        envelopeContainer.classList.add('envelope-open');
+      }, 350);
+
+      // Smooth camera glide closer to 3D heart scene
+      const isMobile = window.innerWidth < 640;
+      const targetCamZ = isMobile ? 5.8 : 4.4;
+      const camGlideInterval = setInterval(() => {
+        if (camera && camera.position.z > targetCamZ) {
+          camera.position.z -= 0.05;
+        } else {
+          clearInterval(camGlideInterval);
+        }
+      }, 30);
+
+      // 5. Fade out envelope overlay and reveal full wedding invitation
+      setTimeout(() => {
+        gateOverlay.classList.add('opacity-0', 'pointer-events-none');
+
+        mainContent.classList.remove('opacity-0', 'pointer-events-none');
+        mainContent.classList.add('opacity-100', 'pointer-events-auto');
+
+        stickyBar.classList.remove('opacity-0', 'pointer-events-none');
+        stickyBar.classList.add('opacity-100', 'pointer-events-auto');
+
+        showToast("Welcome to the Royal Celebration!", "✨");
+      }, 1600);
+    });
+
+    /* ----------------------------------------------------
+       4. 3D EXPLORATION VIEW TOGGLE
+    ---------------------------------------------------- */
+    let is3DModeOnly = false;
+    const view3DToggle = document.getElementById('view-3d-toggle');
+    const viewModeText = document.getElementById('view-mode-text');
+    const launch3DBtn = document.getElementById('launch-3d-btn');
+    const exit3DBanner = document.getElementById('exit-3d-banner');
+    const exit3DBtn = document.getElementById('exit-3d-btn');
+
+    function set3DMode(active) {
+      is3DModeOnly = active;
+      if (is3DModeOnly) {
+        mainContent.style.opacity = '0';
+        mainContent.style.pointerEvents = 'none';
+        viewModeText.innerText = "Show Invite";
+        exit3DBanner.classList.remove('opacity-0', 'translate-y-6', 'pointer-events-none');
+        exit3DBanner.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        showToast("Drag screen to spin 3D heart in 360°", "💖");
+      } else {
+        mainContent.style.opacity = '1';
+        mainContent.style.pointerEvents = 'auto';
+        viewModeText.innerText = "Explore 3D";
+        exit3DBanner.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        exit3DBanner.classList.add('opacity-0', 'translate-y-6', 'pointer-events-none');
+      }
+    }
+
+    view3DToggle.addEventListener('click', () => set3DMode(!is3DModeOnly));
+    if (launch3DBtn) {
+      launch3DBtn.addEventListener('click', () => set3DMode(true));
+    }
+    if (exit3DBtn) {
+      exit3DBtn.addEventListener('click', () => set3DMode(false));
+    }
+
+    /* ----------------------------------------------------
+       5. LIVE COUNTDOWN TIMER (13th December 2026, 14:00 IST)
+    ---------------------------------------------------- */
+    const weddingDate = new Date('2026-12-13T14:00:00+05:30').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = weddingDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('timer-days').innerText = "00";
+        document.getElementById('timer-hours').innerText = "00";
+        document.getElementById('timer-minutes').innerText = "00";
+        document.getElementById('timer-seconds').innerText = "00";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('timer-days').innerText = String(days).padStart(2, '0');
+      document.getElementById('timer-hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('timer-minutes').innerText = String(mins).padStart(2, '0');
+      document.getElementById('timer-seconds').innerText = String(secs).padStart(2, '0');
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* ----------------------------------------------------
+       6. ADD TO CALENDAR (Google & Apple .ICS)
+    ---------------------------------------------------- */
+    const eventDetails = {
+      title: "Wedding Ceremony: Shaikh Mohammed & Syeda Maliha",
+      description: "Nikah & Walima ceremony of Shaikh Mohammed & Syeda Maliha at Dada Hayat Qalandar Function Hall, Barsi Takli.",
+      location: "Dada Hayat Qalandar Function Hall, Near New Bus Stand, Barsi Takli, Dist. Akola",
+      start: "20261213T083000Z", // UTC equivalence of 14:00 IST
+      end: "20261213T163000Z"
+    };
+
+    document.getElementById('google-cal-btn').addEventListener('click', () => {
+      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${eventDetails.start}/${eventDetails.end}&details=${encodeURIComponent(eventDetails.description)}&location=${encodeURIComponent(eventDetails.location)}`;
+      window.open(gcalUrl, '_blank');
+      showToast("Opening Google Calendar...", "📅");
+    });
+
+    document.getElementById('apple-cal-btn').addEventListener('click', () => {
+      const ics = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//ShaikhMohammed&SyedaMalihaWedding//EN",
+        "BEGIN:VEVENT",
+        `SUMMARY:${eventDetails.title}`,
+        `DESCRIPTION:${eventDetails.description}`,
+        `LOCATION:${eventDetails.location}`,
+        `DTSTART:${eventDetails.start}`,
+        `DTEND:${eventDetails.end}`,
+        "STATUS:CONFIRMED",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute('download', 'ShaikhMohammed_SyedaMaliha_Wedding.ics');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Downloaded .ics Calendar Invite", "✅");
+    });
+
+    /* ----------------------------------------------------
+       7. GUESTBOOK WISHES & DUAS (Local Session Support)
+    ---------------------------------------------------- */
+    const defaultWishes = [
+      {
+        name: "Shaikh Farhan & Family",
+        city: "Amravati",
+        text: "Barakallahu lakuma wa baraka alaikuma wa jama'a bainakuma fee khair! Heartiest congratulations to both families. 🤲💐",
+        time: "Just now"
+      },
+      {
+        name: "Syed Imran Quadri",
+        city: "Akola",
+        text: "Mabrouk! May Allah grant both of you eternal peace, boundless affection, and abundant barakah. 🤍✨",
+        time: "1 hour ago"
+      },
+      {
+        name: "Dr. Aamir Patel",
+        city: "Nagpur",
+        text: "Warmest congratulations Mohammed bhai & Syeda sister! Looking forward to attending the royal feast. 🌸",
+        time: "Yesterday"
+      }
+    ];
+
+    function getSavedWishes() {
+      try {
+        const stored = localStorage.getItem('nikah_guestbook_wishes');
+        return stored ? JSON.parse(stored) : defaultWishes;
+      } catch (e) {
+        return defaultWishes;
+      }
+    }
+
+    function renderWishes() {
+      const listContainer = document.getElementById('wishes-list');
+      const wishes = getSavedWishes();
+      document.getElementById('wishes-count').innerText = `${wishes.length} Blessings`;
+
+      listContainer.innerHTML = wishes.map(wish => `
+        <div class="p-3 rounded-xl bg-royal-900/60 border border-gold-500/20 text-xs space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-medium text-gold-300 font-cinzel">${escapeHTML(wish.name)} <span class="text-[10px] text-gold-400/60 font-sans">(${escapeHTML(wish.city || 'Guest')})</span></span>
+            <span class="text-[10px] text-gold-400/50">${wish.time || 'Recent'}</span>
+          </div>
+          <p class="text-gold-100/90 font-sans leading-relaxed">${escapeHTML(wish.text)}</p>
+        </div>
+      `).join('');
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag));
+    }
+
+    document.querySelectorAll('.quick-blessing').forEach(button => {
+      button.addEventListener('click', () => {
+        const msg = button.getAttribute('data-dua');
+        const input = document.getElementById('guest-message');
+        input.value = msg;
+        input.focus();
+      });
+    });
+
+    const duaForm = document.getElementById('dua-form');
+    duaForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('guest-name').value.trim();
+      const city = document.getElementById('guest-city').value.trim();
+      const text = document.getElementById('guest-message').value.trim();
+
+      if (!name || !text) return;
+
+      const newWish = {
+        name,
+        city: city || 'Well-wisher',
+        text,
+        time: 'Just now'
+      };
+
+      const wishes = getSavedWishes();
+      wishes.unshift(newWish);
+
+      try {
+        localStorage.setItem('nikah_guestbook_wishes', JSON.stringify(wishes));
+      } catch (err) { }
+
+      renderWishes();
+      duaForm.reset();
+      showToast("JazakAllah! Your Dua has been shared.", "🤲");
+
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 30,
+          spread: 50,
+          origin: { y: 0.85 },
+          colors: ['#d4af37', '#f1df9c']
+        });
+      }
+    });
+
+    renderWishes();
+
+    /* ----------------------------------------------------
+       8. WHATSAPP & CLIPBOARD SHARING
+    ---------------------------------------------------- */
+    const shareMessage = `🌸 *Wedding Invitation* 🌸\n\nبِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\n\nTogether with their families, cordially invite you to celebrate the auspicious Nikah of:\n\n*Shaikh Mohammed* (S/o Shaikh Abdullah, Camp Area, Amravati)\n& \n*Syeda Maliha* (D/o Syed Sharafat Ali, Barsi Takli)\n\n🗓 *Date:* Sunday, 13th December 2026\n📍 *Venue:* Dada Hayat Qalandar Function Hall, Near New Bus Stand, Barsi Takli, Dist. Akola\n\nExperience the interactive 3D Royal invitation here:\n${window.location.href}`;
+
+    document.getElementById('whatsapp-share-btn').addEventListener('click', () => {
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`;
+      window.open(waUrl, '_blank');
+    });
+
+    document.getElementById('copy-link-btn').addEventListener('click', () => {
+      const tempInput = document.createElement('textarea');
+      tempInput.value = window.location.href;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast("Invitation link copied to clipboard!", "📋");
+      } catch (e) {
+        showToast("Link: " + window.location.href, "🔗");
+      }
+      document.body.removeChild(tempInput);
+    });
+
+    /* ----------------------------------------------------
+       9. TOAST NOTIFICATION HELPER
+    ---------------------------------------------------- */
+    let toastTimeout;
+    function showToast(message, icon = "✨") {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      const toastIcon = document.getElementById('toast-icon');
+
+      toastMsg.innerText = message;
+      toastIcon.innerText = icon;
+
+      toast.classList.remove('opacity-0', '-translate-y-20', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-20', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // Initialize Three.js on page load
+    window.onload = function () {
+      initThreeJS();
+      animateThreeJS();
+    };
+  </script>
+</body>
+
+</html>

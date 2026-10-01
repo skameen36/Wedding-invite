@@ -1,0 +1,86 @@
+/* ============================================================
+   RESPONSIVE DESIGN & MOBILE OPTIMIZATIONS (2026 EDITION)
+   ============================================================ */
+
+/* Small Phones (iPhone SE, 320px - 380px) */
+@media (max-width: 380px) {
+  .envelope-stage {
+    max-width: 95vw !important;
+  }
+  
+  .envelope-card-inner {
+    padding: 0.75rem !important;
+  }
+
+  .wax-seal {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .clay-card {
+    padding: 1rem 0.85rem !important;
+    border-radius: 1.25rem !important;
+  }
+
+  .clay-card-elevated {
+    padding: 1rem 0.75rem !important;
+    border-radius: 1.25rem !important;
+  }
+}
+
+/* Medium Phones (381px - 480px) */
+@media (max-width: 480px) {
+  .invitation-container {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+    padding-top: 4.2rem;
+    padding-bottom: 5rem;
+  }
+
+  .clay-card {
+    padding: 1.25rem 1rem !important;
+  }
+
+  .action-buttons-group {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .action-buttons-group > button,
+  .action-buttons-group > a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .floating-top-bar {
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+    gap: 0.35rem !important;
+  }
+}
+
+/* Tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .invitation-container {
+    max-width: 88vw;
+    padding-top: 4.8rem;
+  }
+}
+
+/* Desktop & Laptops (769px+) */
+@media (min-width: 769px) {
+  .invitation-container {
+    max-width: 660px;
+    padding-top: 4.8rem;
+  }
+}
+
+/* Safe Area Insets for Modern iPhone Notches & Dynamic Islands */
+@supports (padding: max(0px)) {
+  .invitation-container {
+    padding-bottom: max(3.5rem, env(safe-area-inset-bottom) + 2rem);
+  }
+  .floating-exit-banner {
+    bottom: max(1.5rem, env(safe-area-inset-bottom) + 0.5rem) !important;
+  }
+}

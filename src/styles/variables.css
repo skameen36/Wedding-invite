@@ -1,0 +1,65 @@
+:root {
+  /* Royal Islamic Emerald Colors */
+  --royal-950: #01110b;
+  --royal-900: #042118;
+  --royal-850: #072d21;
+  --royal-800: #0a3d2e;
+  --royal-700: #0f4f3c;
+  --royal-600: #146950;
+  --royal-500: #1a8264;
+
+  /* 24K Luxury Gold Color Suite */
+  --gold-100: #fffef8;
+  --gold-200: #fbf3d5;
+  --gold-300: #f4e39f;
+  --gold-400: #e6c86a;
+  --gold-500: #d4af37;
+  --gold-600: #b8922c;
+  --gold-700: #8c6c19;
+  --gold-800: #59440c;
+
+  /* Ivory Accents */
+  --ivory-50: #fffefb;
+  --ivory-100: #fdfaf0;
+  --ivory-200: #f8f1de;
+
+  /* Gradients */
+  --gold-gradient: linear-gradient(135deg, #fffef8 0%, #f4e39f 25%, #d4af37 60%, #9e7514 100%);
+  --gold-gradient-soft: linear-gradient(135deg, rgba(254, 251, 240, 0.95) 0%, rgba(212, 175, 55, 0.65) 100%);
+  --emerald-gradient: linear-gradient(180deg, #093729 0%, #05241b 50%, #02120c 100%);
+  --emerald-card-gradient: linear-gradient(145deg, rgba(7, 45, 33, 0.88) 0%, rgba(3, 20, 14, 0.94) 100%);
+
+  /* 2026 Claymorphism Surface Recipes */
+  --clay-card-bg: radial-gradient(135% 120% at 20% 15%, rgba(13, 66, 49, 0.94) 0%, rgba(5, 30, 21, 0.96) 65%, rgba(2, 16, 11, 0.98) 100%);
+  --clay-card-elevated-bg: radial-gradient(120% 120% at 25% 20%, rgba(18, 82, 62, 0.96) 0%, rgba(7, 45, 33, 0.97) 70%, rgba(3, 20, 14, 0.98) 100%);
+  --clay-gold-bg: radial-gradient(130% 120% at 25% 20%, #fff7d6 0%, #e6c86a 30%, #d4af37 70%, #997415 100%);
+  --clay-emerald-pill: radial-gradient(130% 120% at 25% 20%, rgba(20, 95, 72, 0.9) 0%, rgba(6, 40, 29, 0.95) 75%, rgba(2, 16, 11, 0.98) 100%);
+
+  /* 2026 Claymorphic Dual Shadows (Outer spread + Inner tactile bevel) */
+  --clay-shadow-card: 0 24px 50px -12px rgba(0, 0, 0, 0.9), 0 0 40px rgba(212, 175, 55, 0.18), inset 0 3px 6px rgba(255, 255, 255, 0.26), inset 0 -4px 10px rgba(0, 0, 0, 0.7);
+  --clay-shadow-pill: 0 10px 24px -5px rgba(0, 0, 0, 0.75), 0 0 18px rgba(212, 175, 55, 0.22), inset 0 2.5px 4px rgba(255, 255, 255, 0.35), inset 0 -2.5px 5px rgba(0, 0, 0, 0.6);
+  --clay-shadow-btn: 0 14px 30px -6px rgba(212, 175, 55, 0.55), 0 6px 15px rgba(0, 0, 0, 0.65), inset 0 3px 5px rgba(255, 255, 255, 0.75), inset 0 -3px 7px rgba(100, 75, 10, 0.65);
+  --clay-shadow-btn-active: 0 4px 12px rgba(0, 0, 0, 0.7), inset 0 4px 8px rgba(0, 0, 0, 0.65), inset 0 -1px 3px rgba(255, 255, 255, 0.25);
+  --clay-shadow-tile: 0 12px 28px -6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2), inset 0 3px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 6px rgba(0, 0, 0, 0.65);
+
+  /* 2026 Neo-Glassmorphism Tokens */
+  --glass-crystal-bg: linear-gradient(135deg, rgba(12, 58, 44, 0.72) 0%, rgba(4, 26, 19, 0.84) 100%);
+  --glass-crystal-border: 1px solid rgba(244, 227, 159, 0.38);
+  --glass-crystal-blur: blur(24px) saturate(190%);
+  --glass-island-bg: rgba(3, 20, 14, 0.88);
+  --glass-island-border: 1.5px solid rgba(212, 175, 55, 0.45);
+
+  /* Shadows & Illuminations */
+  --gold-glow-sm: 0 0 15px rgba(212, 175, 55, 0.35);
+  --gold-glow-md: 0 0 32px rgba(212, 175, 55, 0.5);
+  --gold-glow-lg: 0 0 60px rgba(212, 175, 55, 0.7);
+  --emerald-glow: 0 0 40px rgba(15, 79, 60, 0.6);
+
+  /* Typography */
+  --font-cinzel: 'Cinzel', serif;
+  --font-cinzel-dec: 'Cinzel Decorative', serif;
+  --font-arabic: 'Amiri', serif;
+  --font-playfair: 'Playfair Display', serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+}
